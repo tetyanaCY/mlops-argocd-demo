@@ -1,0 +1,32 @@
+﻿server:
+  service:
+    type: ClusterIP
+    port: 80
+  extraArgs:
+    - --insecure
+
+dex:
+  enabled: false
+
+controller:
+  extraArgs:
+    - --app-resync
+    - "30"
+    - --operation-processors
+    - "5"
+    - --status-processors
+    - "10"
+
+configs:
+  rbac:
+    policy.csv: |
+      p, role:admin, applications, *, *, allow
+      g, admin, role:admin
+    policy.default: role:admin
+  params:
+    server.insecure: "true"
+
+repoServer:
+  extraEnv:
+    - name: ARGOCD_EXEC_TIMEOUT
+      value: "180s"
